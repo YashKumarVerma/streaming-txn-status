@@ -1,29 +1,3 @@
-# streaming-txn-status
-
-a proof of concept to show how to get realtime updates using LISTEN and NOTIFY functionality provided by postgres.
-
-
-When transactions were created
-![](./images/2024-09-25-08-57-04.png)
-
-When status of id=21 is changed
-![](./images/2024-09-25-08-57-43.png)
-
-As status is changing for a given transaction id, the socket is able to receive updates
-![](./images/2024-09-25-08-58-22.png)
-
-Also received signal for more than one update
-![](./images/2024-09-25-08-59-02.png)
-
-
-
-## How to run
-- Webserver: `go run server/main.go`
-- Client: `go run client/main.go $id` where id = transaction id
-
-
-## How to setup database
-```sql
 -- Step 1: Create the database
 -- Run this command in your PostgreSQL shell or using a database client
 DROP DATABASE test_bench;
@@ -63,5 +37,3 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER transaction_status_change_trigger AFTER
 UPDATE ON transactions FOR EACH ROW
 EXECUTE PROCEDURE notify_transaction_status_change ();
-
-```
